@@ -6,7 +6,7 @@
  */
 
 function plugin_init_inversiones() {
-    global $PLUGIN_HOOKS;
+    global $PLUGIN_HOOKS,$CFG_GLPI;
 
     $PLUGIN_HOOKS['csrf_compliant']['inversiones'] = true;
     $PLUGIN_HOOKS['change_profile']['inversiones'] = array('PluginInversionesProfile', 'changeProfile');
@@ -19,8 +19,8 @@ function plugin_init_inversiones() {
     if (isset($_SESSION['glpiID']) && $plugin->isInstalled('inversiones') && $plugin->isActivated('inversiones')) {
         if (Session::haveRight('plugin_inversiones', READ)) {
 
-//aquí se agrega al menú complementos
-$PLUGIN_HOOKS['menu_toadd']['inversiones'] = array(
+            //aquí se agrega al menú complementos
+            $PLUGIN_HOOKS['menu_toadd']['inversiones'] = array(
                'plugins' => 'PluginInversionesIndex'); //en la clase form.class.php hace referencia esto
 
         }

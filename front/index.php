@@ -1,47 +1,25 @@
 <?php
-/*
- *
- -------------------------------------------------------------------------
- Plugin GLPI Inversiones
- */
 
 include ("../../../inc/includes.php");
-include ('../inc/misfunciones.php'); //aqui esta parte de la lógica
+include("../inc/index.class.php");
 
-Session::checkLoginUser();
-session_start();
-
-
-
-$plugin = new Plugin();
-if (!$plugin->isInstalled("inversiones") || !$plugin->isActivated("inversiones")) {
-   Html::displayNotFoundError();
-}
-
-Session::checkRight('plugin_inversiones', READ);
-
-$app = new PluginInversionesIndex();
-
-Html::header(
-   $LANG['plugin_inversiones']['title'],
-   $_SERVER["PHP_SELF"],
-   'plugins',
-   "PluginInversionesIndex"
-);
-
-
-//podriamos llamar a las funciones desde cualquier lado con include
-
-//printInversiones();
-
-
-//ó  utilizamos la herencia de la clase index
-
-
-$app->formIndex();
-
-if (Session::getCurrentInterface() == "helpdesk") {
-   Html::helpFooter();
+if ($_SESSION["glpiactiveprofile"]["interface"] == "central") {
+   Html::header(__("Inversiones", "inversiones"), $_SERVER['PHP_SELF'], "plugins", "pluginInversionesIndex", "");
 } else {
-   Html::footer();
+   Html::helpHeader(__("Inversiones", "inversiones"), $_SERVER['PHP_SELF']);
 }
+
+//checkTypeRight('PluginExampleExample',"r");
+
+
+$inversiones = new pluginInversionesIndex();
+if (pluginInversionesIndex::canView() || pluginInversionesIndex::canCreate()) {
+   Search::show("pluginInversionesIndex");
+} else {
+   echo "<div align='center'><br><br><img src=\"".
+      $CFG_GLPI["root_doc"]."/pics/warning.png\" alt=\"warning\"><br><br>";
+   echo "<b>".__s('Access denied')."</b></div>";
+}
+//$inversiones->showMenu();
+
+Html::footer();
